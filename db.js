@@ -1,5 +1,3 @@
 [
-  {
-    "password": "rulzzofficial411"
-  }
+    "passwrd": "rulzzofficial411"
 ]
