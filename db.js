@@ -1,3 +1,0 @@
-[
-    "passwrd": "rulzzofficial411"
-]
