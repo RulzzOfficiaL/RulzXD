@@ -393,3 +393,318 @@ html, body{
 @media (min-width: 768px){
   .mobile-only{ display: none; }
 }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+  40%, 43% { transform: translate3d(0,-8px,0); }
+  70% { transform: translate3d(0,-4px,0); }
+  90% { transform: translate3d(0,-2px,0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out;
+}
+
+/* Error Container */
+.error-container {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+/* Error Header */
+.error-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #374151;
+}
+
+.error-icon {
+  font-size: 2rem;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fca5a5;
+  margin: 0;
+}
+
+.error-badge {
+  background: #dc2626;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Error Message Section */
+.error-message-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 8px;
+}
+
+.error-message-icon {
+  color: #f87171;
+  font-size: 1.25rem;
+  margin-top: 2px;
+}
+
+.error-message-content {
+  flex: 1;
+}
+
+.error-message-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fca5a5;
+  margin: 0 0 4px 0;
+}
+
+.error-message-text {
+  color: #d1d5db;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* API Key Display */
+.api-key-display {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(55, 65, 81, 0.5);
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+}
+
+.api-key-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+}
+
+.api-key-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.api-key-code {
+  background: #111827;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  color: #60a5fa;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  flex: 1;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: #374151;
+  border: 1px solid #4b5563;
+  color: #9ca3af;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #4b5563;
+  color: #d1d5db;
+}
+
+.copy-btn.copied {
+  background: #059669;
+  border-color: #10b981;
+  color: white;
+}
+
+/* Troubleshooting Section */
+.troubleshooting-section {
+  margin-bottom: 24px;
+}
+
+.troubleshooting-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d1d5db;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.troubleshooting-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.troubleshooting-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #374151;
+}
+
+.troubleshooting-item:last-child {
+  border-bottom: none;
+}
+
+.troubleshooting-item i {
+  color: #10b981;
+  font-size: 0.75rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-retry, .btn-clear, .btn-help {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-retry {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-retry:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.btn-clear {
+  background: #374151;
+  color: #d1d5db;
+}
+
+.btn-clear:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.btn-help {
+  background: transparent;
+  color: #60a5fa;
+  border: 1px solid #60a5fa;
+}
+
+.btn-help:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
+/* Error Footer */
+.error-footer {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid #374151;
+}
+
+.footer-text {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.support-link {
+  color: #60a5fa;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.support-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .error-container {
+    padding: 16px;
+  }
+  
+  .error-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .api-key-value {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .copy-btn {
+    align-self: flex-end;
+    width: auto;
+    margin-top: 8px;
+  }
+}
+
+/* Transition untuk smooth show/hide */
+#resultContent {
+  transition: all 0.3s ease-in-out;
+}
+
+#resultContent.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#resultContent:not(.show) {
+  opacity: 0;
+  transform: scale(0.95);
+  }
