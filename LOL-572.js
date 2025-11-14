@@ -1,6 +1,5 @@
-// NOTIFICATION SYSTEM - STACKING VERSION
+// NOTIFICATION SYSTEM
 function showNotification(message, type = 'info') {
-  // Create notification container if not exists
   let container = document.querySelector('.notification-container');
   if (!container) {
     container = document.createElement('div');
@@ -8,7 +7,6 @@ function showNotification(message, type = 'info') {
     document.body.appendChild(container);
   }
 
-  // Create notification element
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   
@@ -23,14 +21,12 @@ function showNotification(message, type = 'info') {
     </div>
   `;
 
-  // Add to top of container (newest on top)
   if (container.firstChild) {
     container.insertBefore(notification, container.firstChild);
   } else {
     container.appendChild(notification);
   }
 
-  // Auto remove after 4 seconds
   setTimeout(() => {
     if (notification.parentNode) {
       notification.classList.add('notification-exit');
@@ -43,11 +39,9 @@ function showNotification(message, type = 'info') {
   }, 4000);
 }
 
-// Clear all notifications
 function clearAllNotifications() {
   const container = document.querySelector('.notification-container');
   if (container) {
-    // Animate out all notifications
     const notifications = container.querySelectorAll('.notification');
     notifications.forEach(notification => {
       notification.classList.add('notification-exit');
@@ -58,7 +52,6 @@ function clearAllNotifications() {
       }, 300);
     });
     
-    // Remove container after animations
     setTimeout(() => {
       if (container.parentNode && container.children.length === 0) {
         container.parentNode.removeChild(container);
@@ -67,15 +60,6 @@ function clearAllNotifications() {
   }
 }
 
-// TEST FUNCTION - Bisa dihapus kalo udah work
-function testNotifications() {
-  showNotification('Test notif 1 - Success', 'success');
-  setTimeout(() => showNotification('Test notif 2 - Error', 'error'), 500);
-  setTimeout(() => showNotification('Test notif 3 - Warning', 'warning'), 1000);
-  setTimeout(() => showNotification('Test notif 4 - Info', 'info'), 1500);
-}
-
-// Mobile menu functionality
 function initializeMobileMenu() {
   const hamb = document.getElementById('hamb');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -101,7 +85,6 @@ function initializeMobileMenu() {
   }
 }
 
-// API Key Check functionality
 function initializeAPIKeyCheck() {
   const checkApiKeyBtn = document.getElementById('checkApiKey');
   const clearInputBtn = document.getElementById('clearInput');
@@ -137,7 +120,7 @@ async function checkAPIKey() {
   }
   
   try {
-    showNotification('🔍 Memeriksa status API Key...', 'info');
+    showNotification('Memeriksa status API Key...', 'info');
     
     const response = await fetch('https://rulz-xdapi.vercel.app/api/check-api-key', {
       method: 'POST',
@@ -148,16 +131,15 @@ async function checkAPIKey() {
     const result = await response.json();
     
     if (result.success) {
-      showNotification('✅ API Key valid dan aktif!', 'success');
+      showNotification('API Key valid dan aktif!', 'success');
       displayAPIKeyResult(apiKey, result.data);
     } else {
-      showNotification('❌ API Key tidak valid atau tidak ditemukan', 'error');
+      showNotification('API Key tidak valid atau tidak ditemukan', 'error');
       displayAPIKeyError(apiKey, result.message);
     }
     
   } catch (error) {
-    console.error('Error:', error);
-    showNotification('💥 Gagal terhubung ke server', 'error');
+    showNotification('Gagal terhubung ke server', 'error');
   }
 }
 
@@ -195,16 +177,16 @@ function displayAPIKeyResult(apiKey, keyDetails) {
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
         <div>
-          <div class="font-medium mb-1">📅 Masa Aktif</div>
+          <div class="font-medium mb-1">Masa Aktif</div>
           <div>Dibuat: ${formatDate(keyDetails.created_at)}</div>
           <div>Kadaluarsa: ${formatDate(keyDetails.expires_at)}</div>
           <div class="${keyDetails.isExpired ? 'text-red-400' : 'text-green-400'} font-medium">
-            ${keyDetails.isExpired ? '✅ Sudah kadaluarsa' : `⏳ ${keyDetails.daysLeft} hari lagi`}
+            ${keyDetails.isExpired ? 'Sudah kadaluarsa' : `${keyDetails.daysLeft} hari lagi`}
           </div>
         </div>
         
         <div>
-          <div class="font-medium mb-1">📊 Penggunaan</div>
+          <div class="font-medium mb-1">Penggunaan</div>
           <div>Limit: ${keyDetails.request_limit || 0} requests</div>
           <div>Digunakan: ${keyDetails.requests_used || 0} requests</div>
           <div>Tersisa: ${(keyDetails.request_limit || 0) - (keyDetails.requests_used || 0)} requests</div>
@@ -213,7 +195,7 @@ function displayAPIKeyResult(apiKey, keyDetails) {
       
       ${keyDetails.notes ? `
       <div>
-        <div class="font-medium mb-1">📝 Catatan</div>
+        <div class="font-medium mb-1">Catatan</div>
         <div class="text-sm muted">${keyDetails.notes}</div>
       </div>
       ` : ''}
@@ -264,13 +246,9 @@ function updateYear() {
   }
 }
 
-// Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
   initializeMobileMenu();
   initializeAPIKeyCheck();
   updateYear();
   window.scrollTo(0, 0);
-  
-  // Test notifications - bisa dihapus kalo udah work
-  // setTimeout(testNotifications, 1000);
 });
