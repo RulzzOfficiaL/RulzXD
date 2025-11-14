@@ -122,12 +122,14 @@ async function checkAPIKey() {
   try {
     showNotification('Memeriksa status API Key...', 'info');
     
-    // Panggil endpoint baru yang udah kita bikin
-    const response = await fetch(`/api/check-api-key?apikey=${encodeURIComponent(apiKey)}`);
+    // PAKE ENDPOINT BARU
+    const response = await fetch(`/api/verify-apikey?apikey=${encodeURIComponent(apiKey)}`);
     const result = await response.json();
     
+    console.log('Response:', result); // Debug
+    
     if (result.success) {
-      showNotification('API Key valid dan aktif!', 'success');
+      showNotification(result.message, 'success');
       displayAPIKeyResult(apiKey, result.data);
     } else {
       showNotification(result.message, 'error');
