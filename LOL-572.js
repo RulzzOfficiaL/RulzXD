@@ -122,21 +122,15 @@ async function checkAPIKey() {
   try {
     showNotification('Memeriksa status API Key...', 'info');
     
-    const response = await fetch('https://rulz-xdapi.vercel.app/api/check-api-key', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey })
-    });
-    
+    // Panggil endpoint baru yang udah kita bikin
+    const response = await fetch(`/api/check-api-key?apikey=${encodeURIComponent(apiKey)}`);
     const result = await response.json();
-    console.log('DEBUG RESPONSE:', result); // Buat ngecek structure response
     
-    // FIX: Pake result.success sesuai backend lu
-    if (result.success === true) {
+    if (result.success) {
       showNotification('API Key valid dan aktif!', 'success');
       displayAPIKeyResult(apiKey, result.data);
     } else {
-      showNotification(result.message || 'API Key tidak valid atau tidak ditemukan', 'error');
+      showNotification(result.message, 'error');
       displayAPIKeyError(apiKey, result.message);
     }
     
@@ -146,17 +140,17 @@ async function checkAPIKey() {
   }
 }
 
-// Pastiin display function juga match
+// FUNCTION DISPLAY HASIL
 function displayAPIKeyResult(apiKey, data) {
   const resultDiv = document.getElementById('apiKeyResult') || createResultElement();
   
   resultDiv.innerHTML = `
     <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-top: 10px;">
       <h4>✅ API Key Valid</h4>
+      <p><strong>Key:</strong> ${apiKey.substring(0, 10)}...</p>
       <p><strong>Client:</strong> ${data.client_name}</p>
-      <p><strong>Email:</strong> ${data.client_email}</p>
       <p><strong>Status:</strong> ${data.status}</p>
-      <p><strong>Usage:</strong> ${data.requests_used || 0}/${data.request_limit || 'unlimited'}</p>
+      <p><strong>Usage:</strong> ${data.requests_used || 0}/${data.request_limit || 'unlimited'} (${data.remaining} remaining)</p>
       <p><strong>Expires:</strong> ${data.expires_at} (${data.daysLeft} hari lagi)</p>
       <p><strong>Last Used:</strong> ${data.last_used || 'Never'}</p>
     </div>
@@ -173,6 +167,13 @@ function displayAPIKeyError(apiKey, message) {
       <p><strong>Error:</strong> ${message}</p>
     </div>
   `;
+}
+
+function createResultElement() {
+  const div = document.createElement('div');
+  div.id = 'apiKeyResult';
+  document.body.appendChild(div);
+  return div;
 }
 
 function formatDate(dateString) {
