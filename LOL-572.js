@@ -250,5 +250,16 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeMobileMenu();
   initializeAPIKeyCheck();
   updateYear();
-  window.scrollTo(0, 0);
+  
+  // Force stay at top multiple times
+  const forceScrollTop = () => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+  
+  forceScrollTop();
+  setTimeout(forceScrollTop, 50);
+  setTimeout(forceScrollTop, 200);
+  setTimeout(forceScrollTop, 500);
 });
