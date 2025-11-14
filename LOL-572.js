@@ -129,105 +129,50 @@ async function checkAPIKey() {
     });
     
     const result = await response.json();
+    console.log('DEBUG RESPONSE:', result); // Buat ngecek structure response
     
-    if (result.success) {
+    // FIX: Pake result.success sesuai backend lu
+    if (result.success === true) {
       showNotification('API Key valid dan aktif!', 'success');
       displayAPIKeyResult(apiKey, result.data);
     } else {
-      showNotification('API Key tidak valid atau tidak ditemukan', 'error');
+      showNotification(result.message || 'API Key tidak valid atau tidak ditemukan', 'error');
       displayAPIKeyError(apiKey, result.message);
     }
     
   } catch (error) {
+    console.error('Error:', error);
     showNotification('Gagal terhubung ke server', 'error');
   }
 }
 
-function displayAPIKeyResult(apiKey, keyDetails) {
-  const resultElement = document.getElementById('apiKeyResult');
-  const resultContent = document.getElementById('resultContent');
+// Pastiin display function juga match
+function displayAPIKeyResult(apiKey, data) {
+  const resultDiv = document.getElementById('apiKeyResult') || createResultElement();
   
-  if (!resultElement || !resultContent) return;
-  
-  let statusClass = 'status-active';
-  let statusText = 'AKTIF';
-  let statusIcon = 'check-circle';
-  
-  if (keyDetails.status === 'expired') {
-    statusClass = 'status-expired';
-    statusText = 'EXPIRED';
-    statusIcon = 'times-circle';
-  } else if (keyDetails.status === 'revoked') {
-    statusClass = 'status-revoked';
-    statusText = 'DIBATALKAN';
-    statusIcon = 'ban';
-  }
-  
-  resultContent.innerHTML = `
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h4 class="font-semibold">${keyDetails.client_name || 'Unknown Client'}</h4>
-          <p class="text-sm muted">${keyDetails.client_email || 'No email'}</p>
-        </div>
-        <span class="${statusClass}">
-          <i class="fas fa-${statusIcon} mr-1"></i>${statusText}
-        </span>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div>
-          <div class="font-medium mb-1">Masa Aktif</div>
-          <div>Dibuat: ${formatDate(keyDetails.created_at)}</div>
-          <div>Kadaluarsa: ${formatDate(keyDetails.expires_at)}</div>
-          <div class="${keyDetails.isExpired ? 'text-red-400' : 'text-green-400'} font-medium">
-            ${keyDetails.isExpired ? 'Sudah kadaluarsa' : `${keyDetails.daysLeft} hari lagi`}
-          </div>
-        </div>
-        
-        <div>
-          <div class="font-medium mb-1">Penggunaan</div>
-          <div>Limit: ${keyDetails.request_limit || 0} requests</div>
-          <div>Digunakan: ${keyDetails.requests_used || 0} requests</div>
-          <div>Tersisa: ${(keyDetails.request_limit || 0) - (keyDetails.requests_used || 0)} requests</div>
-        </div>
-      </div>
-      
-      ${keyDetails.notes ? `
-      <div>
-        <div class="font-medium mb-1">Catatan</div>
-        <div class="text-sm muted">${keyDetails.notes}</div>
-      </div>
-      ` : ''}
-      
-      <div class="text-xs muted border-t border-white/10 pt-3">
-        <div>API Key: <code class="bg-black/20 px-2 py-1 rounded">${apiKey}</code></div>
-      </div>
+  resultDiv.innerHTML = `
+    <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-top: 10px;">
+      <h4>✅ API Key Valid</h4>
+      <p><strong>Client:</strong> ${data.client_name}</p>
+      <p><strong>Email:</strong> ${data.client_email}</p>
+      <p><strong>Status:</strong> ${data.status}</p>
+      <p><strong>Usage:</strong> ${data.requests_used || 0}/${data.request_limit || 'unlimited'}</p>
+      <p><strong>Expires:</strong> ${data.expires_at} (${data.daysLeft} hari lagi)</p>
+      <p><strong>Last Used:</strong> ${data.last_used || 'Never'}</p>
     </div>
   `;
-  
-  resultElement.classList.remove('hidden');
 }
 
 function displayAPIKeyError(apiKey, message) {
-  const resultElement = document.getElementById('apiKeyResult');
-  const resultContent = document.getElementById('resultContent');
+  const resultDiv = document.getElementById('apiKeyResult') || createResultElement();
   
-  if (!resultElement || !resultContent) return;
-  
-  resultContent.innerHTML = `
-    <div class="text-center py-4">
-      <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mb-3"></i>
-      <p class="font-medium">API Key Tidak Ditemukan</p>
-      <p class="text-sm muted mt-1">
-        <span class="text-with-inline-code">
-          API key<code class="bg-black/20 px-2 py-1 rounded">${apiKey}</code> tidak terdaftar di sistem.
-        </span>
-      </p>
+  resultDiv.innerHTML = `
+    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-top: 10px;">
+      <h4>❌ API Key Invalid</h4>
+      <p><strong>Key:</strong> ${apiKey.substring(0, 10)}...</p>
+      <p><strong>Error:</strong> ${message}</p>
     </div>
   `;
-  
-  resultElement.classList.remove('hidden');
 }
 
 function formatDate(dateString) {
@@ -251,7 +196,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeAPIKeyCheck();
   updateYear();
   
-  // Force stay at top multiple times
   const forceScrollTop = () => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
